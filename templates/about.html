@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}About — PhishGuard{% endblock %}
+{% block content %}
+
+<section class="about-section">
+  <div class="wrap narrow">
+    <h1>About this project</h1>
+
+    <p>PhishGuard is a machine-learning phishing website detector built as
+    a final-year college major project. It demonstrates a complete
+    applied ML workflow: dataset preparation, feature engineering, model
+    training and evaluation, and deployment behind a web interface and
+    API.</p>
+
+    <h2>What counts as phishing here</h2>
+    <p>Phishing sites imitate a trusted brand's login or payment page to
+    steal credentials or payment details. Because attackers rarely
+    control the real domain, the URL itself tends to carry tells: extra
+    subdomains, brand names glued onto unrelated domains, IP addresses in
+    place of a hostname, and urgency words like "verify" or "suspended".</p>
+
+    <h2>Why URL-only features</h2>
+    <p>Analyzing only the URL &mdash; rather than fetching the page's
+    content &mdash; keeps the check fast, avoids visiting potentially
+    dangerous pages, and works even when a site is offline or geofenced.
+    The trade-off is that some phishing pages hosted on otherwise clean
+    domains, or legitimate pages with unusual URLs, can be misclassified.
+    Treat every prediction as a strong signal, not a certainty.</p>
+
+    <h2>Model</h2>
+    <p>Several classifiers &mdash; logistic regression, decision tree,
+    random forest, k-nearest neighbors, SVM, and naive Bayes &mdash; are
+    trained on the same feature set and compared on accuracy, precision,
+    recall, and F1 score. The best performer by F1 score is saved and
+    used for live predictions. Full metrics are written to
+    <code>model/evaluation_report.json</code> after training.</p>
+
+    <h2>Limitations</h2>
+    <ul>
+      <li>Trained on a fixed dataset; it will not catch novel phishing
+      patterns it has never seen.</li>
+      <li>Looks only at the URL, not the live page content or
+      certificate details.</li>
+      <li>A "Safe" result means the URL looks structurally normal, not
+      that the destination is verified trustworthy.</li>
+    </ul>
+  </div>
+</section>
+
+{% endblock %}

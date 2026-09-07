@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Scan history — PhishGuard{% endblock %}
+{% block content %}
+
+<section class="dashboard-section">
+  <div class="wrap">
+    <h1>Scan history</h1>
+
+    {% if scans %}
+      <div class="scan-table">
+        {% for scan in scans %}
+          <div class="scan-table-row">
+            <span class="scan-url">{{ scan.url }}</span>
+            <span class="badge badge-{{ 'danger' if scan.prediction == 'Phishing' else 'safe' }}">
+              {{ scan.prediction }}
+            </span>
+            <span class="scan-confidence">{{ (scan.confidence * 100) | round(1) }}%</span>
+            <span class="scan-time">{{ scan.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty-state">No scans yet. <a href="{{ url_for('index') }}">Check your first URL</a>.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

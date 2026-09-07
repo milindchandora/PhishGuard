@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Create account — PhishGuard{% endblock %}
+{% block content %}
+
+<section class="auth-section">
+  <div class="wrap narrow">
+    <div class="auth-card">
+      <h1>Create an account</h1>
+      <p class="auth-sub">Track your scan history and see your stats on a dashboard.</p>
+
+      <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required autocomplete="username">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="email">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required minlength="8" autocomplete="new-password">
+
+        <label for="confirm_password">Confirm password</label>
+        <input type="password" id="confirm_password" name="confirm_password" required minlength="8" autocomplete="new-password">
+
+        <button type="submit">Create account</button>
+      </form>
+
+      <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

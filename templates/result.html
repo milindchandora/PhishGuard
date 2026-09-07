@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Result — PhishGuard{% endblock %}
+{% block content %}
+
+<section class="result-section">
+  <div class="wrap">
+
+    <div class="result-card result-{{ 'danger' if prediction == 'Phishing' else 'safe' }}">
+      <div class="result-status">
+        <span class="result-icon" aria-hidden="true">
+          {% if prediction == 'Phishing' %}&#9888;{% else %}&#10003;{% endif %}
+        </span>
+        <div>
+          <p class="result-label">Website status</p>
+          <h1>{{ 'PHISHING' if prediction == 'Phishing' else 'SAFE' }}</h1>
+        </div>
+        <div class="result-confidence">
+          <p class="result-label">Confidence</p>
+          <p class="confidence-value">{{ (confidence * 100) | round(1) }}%</p>
+        </div>
+      </div>
+
+      <p class="result-message">
+        {% if prediction == 'Phishing' %}
+          Warning: this website appears to be potentially malicious. Its URL
+          shares structural patterns with known phishing links. Avoid
+          entering personal information or credentials.
+        {% else %}
+          This website appears to be legitimate based on its URL structure.
+          This is not a guarantee of safety &mdash; stay cautious with any
+          site asking for sensitive information.
+        {% endif %}
+      </p>
+
+      <p class="result-url">{{ url }}</p>
+    </div>
+
+    <details class="feature-details">
+      <summary>Show extracted URL features</summary>
+      <div class="feature-table">
+        {% for key, value in features.items() %}
+          <div class="feature-row">
+            <span class="feature-key">{{ key }}</span>
+            <span class="feature-value">{{ value }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </details>
+
+    <a class="back-link" href="{{ url_for('index') }}">&larr; Check another URL</a>
+  </div>
+</section>
+
+{% endblock %}

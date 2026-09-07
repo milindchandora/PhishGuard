@@ -1,0 +1,10 @@
+Flask
+Flask-Login
+Werkzeug
+pymongo
+python-dotenv
+pandas
+numpy
+scikit-learn
+joblib
+matplotlib

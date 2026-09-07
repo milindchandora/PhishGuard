@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}PhishGuard — Check a URL{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="wrap hero-row">
+    <div class="hero-copy">
+      <p class="kicker">URL-based phishing detection</p>
+      <h1>Paste a link. Know in one second<br>whether it's trying to fool you.</h1>
+      <p class="hero-sub">
+        PhishGuard reads the structure of a URL &mdash; its length, its
+        subdomains, its punctuation, the words it borrows from real
+        brands &mdash; and runs those signals through a trained
+        classifier to flag likely phishing links before you click them.
+      </p>
+
+      {% if not model_ready %}
+        <div class="model-warning">
+          The ML model hasn't been trained yet. Run
+          <code>python ml/build_sample_dataset.py</code> and then
+          <code>python ml/train_model.py</code> to enable predictions.
+        </div>
+      {% endif %}
+
+      <form class="check-form" action="{{ url_for('check') }}" method="POST">
+        <label for="url" class="sr-only">Website URL</label>
+        <input
+          type="text" id="url" name="url" required
+          placeholder="https://example.com/login"
+          autocomplete="off" spellcheck="false"
+        >
+        <button type="submit" {% if not model_ready %}disabled{% endif %}>
+          Check website
+        </button>
+      </form>
+      <p class="hero-hint">Example: https://paypal-secure-login.verify-account.info</p>
+    </div>
+
+    <div class="hero-panel" aria-hidden="true">
+      <div class="scan-card">
+        <div class="scan-line"></div>
+        <div class="scan-row"><span>url_length</span><span>63</span></div>
+        <div class="scan-row"><span>num_subdomains</span><span>3</span></div>
+        <div class="scan-row"><span>has_https</span><span>0</span></div>
+        <div class="scan-row"><span>has_ip_address</span><span>0</span></div>
+        <div class="scan-row"><span>suspicious_words</span><span>1</span></div>
+        <div class="scan-verdict">PHISHING · 0.94</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-it-works" id="how-it-works">
+  <div class="wrap">
+    <h2>How a URL gives itself away</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-index">Feature extraction</span>
+        <p>Every URL is broken into ~27 numeric signals: length, character
+        counts, subdomain depth, presence of an IP address, HTTPS usage,
+        and known phishing vocabulary like "verify" or "secure-login".</p>
+      </div>
+      <div class="step">
+        <span class="step-index">Model scoring</span>
+        <p>Those signals are scaled and passed to a classifier trained on
+        thousands of labeled legitimate and phishing URLs, which outputs
+        a class and a confidence score.</p>
+      </div>
+      <div class="step">
+        <span class="step-index">Clear verdict</span>
+        <p>You get a plain answer &mdash; Safe or Phishing &mdash; with the
+        confidence behind it, so you can decide before you click.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="wrap">
+    <h2>What PhishGuard checks</h2>
+    <ul class="feature-grid">
+      <li>Domain &amp; subdomain structure</li>
+      <li>Presence of an IP address instead of a domain</li>
+      <li>HTTPS usage</li>
+      <li>Suspicious brand-imitation keywords</li>
+      <li>URL shortening services</li>
+      <li>Unusual character density &amp; entropy</li>
+      <li>@ symbols and redirect tricks</li>
+      <li>Query parameter counts</li>
+    </ul>
+  </div>
+</section>
+
+{% endblock %}

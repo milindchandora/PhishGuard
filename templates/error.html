@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }} — PhishGuard{% endblock %}
+{% block content %}
+
+<section class="error-section">
+  <div class="wrap narrow">
+    <p class="error-code">{{ code }}</p>
+    <h1>{{ message }}</h1>
+    <a class="back-link" href="{{ url_for('index') }}">&larr; Back to home</a>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — PhishGuard{% endblock %}
+{% block content %}
+
+<section class="dashboard-section">
+  <div class="wrap">
+    <h1>Your dashboard</h1>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <p class="stat-label">Total scans</p>
+        <p class="stat-value">{{ stats.total }}</p>
+      </div>
+      <div class="stat-card stat-safe">
+        <p class="stat-label">Safe websites</p>
+        <p class="stat-value">{{ stats.safe }}</p>
+      </div>
+      <div class="stat-card stat-danger">
+        <p class="stat-label">Phishing websites</p>
+        <p class="stat-value">{{ stats.phishing }}</p>
+      </div>
+    </div>
+
+    {% if stats.total > 0 %}
+    <div class="ratio-bar" role="img" aria-label="Safe versus phishing ratio">
+      {% set safe_pct = (stats.safe / stats.total * 100) if stats.total else 0 %}
+      <div class="ratio-safe" data-pct="{{ safe_pct }}"></div>
+      <div class="ratio-danger" data-pct="{{ 100 - safe_pct }}"></div>
+    </div>
+    {% endif %}
+
+    <h2>Recent scans</h2>
+    {% if recent %}
+      <div class="scan-table">
+        {% for scan in recent %}
+          <div class="scan-table-row">
+            <span class="scan-url">{{ scan.url }}</span>
+            <span class="badge badge-{{ 'danger' if scan.prediction == 'Phishing' else 'safe' }}">
+              {{ scan.prediction }}
+            </span>
+            <span class="scan-time">{{ scan.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+          </div>
+        {% endfor %}
+      </div>
+      <a class="back-link" href="{{ url_for('history') }}">View full history &rarr;</a>
+    {% else %}
+      <p class="empty-state">No scans yet. <a href="{{ url_for('index') }}">Check your first URL</a>.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
+<script> document.querySelectorAll('.ratio-safe, .ratio-danger').forEach(el => { el.style.width = el.dataset.pct + '%'; }); </script>
